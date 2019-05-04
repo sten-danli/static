@@ -1,4 +1,5 @@
-﻿#include <iostream>
+﻿//static 和 const的详解；
+#include <iostream>
 using namespace std;
 class Test
 {
@@ -15,6 +16,48 @@ public:
 	{
 		count--;
 	}
+
+//const举例详解；
+public:void list()//普通成员方法；
+	{
+	data = 988;
+	cout << "This is list()" << endl;
+	}
+
+public:void list()const//常方法；
+{
+	//data = 899;因const所以不能修改成员变量；
+	cout << "This is list()const" << endl;
+}
+	//一个函数的const即可以修饰参数也可以修饰函数，还可以修饰返回值。
+	/*例如：void func（const Test&t）这里面const的作用主要是该参数不能在其函数内部该引用对象进行成员的修改，
+	这主要是为了保护参数。
+	而void func（const Test&t）const 这里有在函数后加了一个const，那么这个const又起了什么作用呢？
+	它所修饰的方法叫做常量方法，常方法是限定该方法不能去改变整个类的数据成员，也就是常方法指定的是这个方法是常性的，我不能再方法的内部或者函数的内部
+	对数据成员进行任何的数据修改，这就是const的表面意思。其根本理解是这样的：
+
+	void list() 实际内部解析是这样的: void list(Test * const this)
+
+	和带有尾部带有const函数的内部解析：
+
+	void list()const 实际内部解析是这样的: void list(const Test * const this)
+
+	第二函数的const是修饰谁的呢？
+	这个const写在了函数的后面，这个const最终是加到了Test前面，如下：
+
+	1.	void list(const Test * const this)
+	他和
+	2.	void list(Test * const this)
+
+	的区别是：void list(Test *const this) const只封锁this指针指向谁不允许改变，但this所指的的对象内容是可以修改的，所以我们
+	可以修改成员对象的值，但是函数后加了const如下：
+
+		void list()const = 	void list(const Test * const this)
+	const最终要封锁的是*this为常量，也就是他所指的对象为常量，这样对象内的数据都为常量不可修改。所以我们说常方法不能修改成员数
+	据，究其根本是应为const封锁的是*this为常量。（const Test内隐藏着this指针，所以const Test就等于 const *this。
+	*/
+	
+//static详解；
 public: //普通方法是可以访问静态成员和普通成员函数的，但是静态函数只能访问静态变量和静态成员函数；
 		//例如在如下函数前加上Static修饰后，static void Show1()，此时函数调动失败，因为他加
 		//上static修饰后这个函数就只能访问静态成员函数了，而不能访问普通变量，为什么是这样呢：
